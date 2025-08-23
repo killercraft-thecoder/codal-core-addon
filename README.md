@@ -1,11 +1,11 @@
 # codal-core-addon
 
-`codal-core-addon` provides additional header files and utilities for use with [codal-core](https://github.com/lancaster-university/codal-core).  
-It is **not** a standalone library — it extends `codal-core` and requires target-specific components to function.
+`codal-core-addon` is a small collection of extra headers, helpers, and other odds‑and‑ends for use with [codal-core](https://github.com/lancaster-university/codal-core).  
+It’s not a standalone library — think of it as a box of spare parts you might need when building CODAL projects.
 
 ## Requirements
 
-To use this repository, you must have:
+To make use of anything here, you’ll need:
 
 - **[codal-core](https://github.com/lancaster-university/codal-core)**  
   The main CODAL runtime library.
@@ -16,13 +16,14 @@ To use this repository, you must have:
 ## Installation
 
 1. Clone or add `codal-core-addon` as a submodule alongside your `codal-core` and target repository.
-2. Ensure your build system includes:
+2. Make sure your build system includes:
    - `codal-core`
    - Your target-specific sources
    - This add-on
-3. Include the headers from `codal-core-addon` where needed.
+3. Pull in the bits you need from `codal-core-addon` in your code.
 
 ## Notes
 
-- This repository is intentionally **not** named `codal-core` to avoid confusion.
-- It will **not** compile or function on its own — it must be used with `codal-core` and a valid CODAL target.
+- This repo is intentionally **not** named `codal-core` to avoid confusion.
+- Contents are a mix of potentially useful extras — you may not need all of them.
+- Will **not** compile or function on its own — it must be used with `codal-core` and a valid CODAL target.
