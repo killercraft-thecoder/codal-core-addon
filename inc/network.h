@@ -162,6 +162,101 @@ typedef struct NET_PACKED {
 
 } net_packet_t;
 
+// -----------------------------------------------------------------------------
+// Ethernet II frame header
+// -----------------------------------------------------------------------------
+
+/**
+ * @brief Ethernet II frame header (14 bytes).
+ *
+ * This struct is packed to match the exact on‑wire layout.
+ * Use with care on MCUs that fault on unaligned access.
+ */
+typedef struct NET_PACKED {
+    uint8_t  dest_mac[6];   /**< Destination MAC address */
+    uint8_t  src_mac[6];    /**< Source MAC address */
+    uint16_t ethertype;     /**< EtherType field (e.g., 0x0800 = IPv4, 0x86DD = IPv6) */
+} eth_header_t;
+
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)
+  _Static_assert(sizeof(eth_header_t) == 14, "Ethernet header must be 14 bytes");
+#endif
+
+// Common EtherType values
+#define ETH_TYPE_IPV4  0x0800
+#define ETH_TYPE_ARP   0x0806
+#define ETH_TYPE_IPV6  0x86DD
+
+// -----------------------------------------------------------------------------
+// UDP datagram header
+// -----------------------------------------------------------------------------
+
+/**
+ * @brief UDP datagram header (8 bytes).
+ *
+ * Packed to match the exact on‑wire layout.
+ * All multi‑byte fields are in network byte order.
+ */
+typedef struct NET_PACKED {
+    uint16_t src_port;   /**< Source port */
+    uint16_t dest_port;  /**< Destination port */
+    uint16_t length;     /**< Length of UDP header + data */
+    uint16_t checksum;   /**< UDP checksum (0 = optional for IPv4) */
+} udp_header_t;
+
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)
+  _Static_assert(sizeof(udp_header_t) == 8, "UDP header must be 8 bytes");
+#endif
+
+// -----------------------------------------------------------------------------
+// Ethernet I / II common MAC header
+// -----------------------------------------------------------------------------
+typedef struct NET_PACKED {
+    uint8_t  dest_mac[6];   /**< Destination MAC address */
+    uint8_t  src_mac[6];    /**< Source MAC address */
+    uint16_t type_length;   /**< EtherType (II) or length (802.3 / I) */
+} eth_mac_header_t;
+
+_Static_assert(sizeof(eth_mac_header_t) == 14, "Ethernet MAC header must be 14 bytes");
+
+// -----------------------------------------------------------------------------
+// Ethernet II interpretation
+// -----------------------------------------------------------------------------
+typedef struct NET_PACKED {
+    uint8_t  dest_mac[6];
+    uint8_t  src_mac[6];
+    uint16_t ethertype;     /**< Protocol type: e.g., 0x0800 = IPv4, 0x86DD = IPv6 */
+} eth2_header_t;
+
+#define ETH_TYPE_IPV4  0x0800
+#define ETH_TYPE_ARP   0x0806
+#define ETH_TYPE_IPV6  0x86DD
+
+// -----------------------------------------------------------------------------
+// IEEE 802.3 interpretation (Ethernet I and later 802.3)
+// -----------------------------------------------------------------------------
+typedef struct NET_PACKED {
+    uint8_t  dest_mac[6];
+    uint8_t  src_mac[6];
+    uint16_t length;        /**< Payload length in bytes (≤ 1500) */
+    // Followed by LLC/SNAP header
+} eth8023_header_t;
+
+_Static_assert(sizeof(eth8023_header_t) == 14, "802.3 header must be 14 bytes");
+
+// LLC header (802.2)
+typedef struct NET_PACKED {
+    uint8_t dsap;           /**< Destination Service Access Point */
+    uint8_t ssap;           /**< Source Service Access Point */
+    uint8_t control;        /**< Control field */
+} llc_header_t;
+
+// SNAP header (if dsap/ssap == 0xAA)
+typedef struct NET_PACKED {
+    uint8_t  oui[3];        /**< Organizationally Unique Identifier */
+    uint16_t protocol_id;   /**< Protocol type (same values as EtherType) */
+} snap_header_t;
+
 #ifdef __cplusplus
 }
 #endif
